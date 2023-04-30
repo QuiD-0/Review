@@ -1,1 +1,7 @@
-
+spring:
+  application:
+    name: review
+  profiles:
+    active: local
+  config:
+    import: optional:configserver:http://130.162.136.116:8888
