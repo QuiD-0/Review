@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/review")
-class ReviewController(
+@RequestMapping("/api/review")
+class ReviewApiController(
     private val createReview: CreateReview
 ) {
 

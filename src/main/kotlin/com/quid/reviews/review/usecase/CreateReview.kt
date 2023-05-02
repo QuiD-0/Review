@@ -17,7 +17,7 @@ interface CreateReview {
     ) : CreateReview {
 
         override fun create(request: ReviewCreateRequest): Review =
-            createReview(request.title, request.description, request.rating, request.productId, request.userName)
+            createReview(request.title, request.description, request.score, request.productId, request.author)
             .let { reviewRepository.save(it) }
 
     }

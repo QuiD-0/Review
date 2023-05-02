@@ -5,3 +5,19 @@ spring:
     active: local
   config:
     import: optional:configserver:http://130.162.136.116:8888
+
+---
+server:
+  port: 9900
+
+spring:
+  profiles:
+    active: dev
+  data:
+    mongodb:
+      auto-index-creation: true
+      uri: mongodb://root:rootUser@130.162.136.116:27017/review?authSource=admin&authMechanism=SCRAM-SHA-1
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
