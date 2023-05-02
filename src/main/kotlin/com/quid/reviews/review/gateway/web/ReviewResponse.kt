@@ -7,15 +7,13 @@ data class ReviewResponse(
     val id: String,
     val title: String,
     val author: String,
-    val createAd: LocalDateTime
+    val score: Int,
+    val createAt: LocalDateTime
 ) {
     companion object {
         fun of(review: Review): ReviewResponse {
             return ReviewResponse(
-                id = review.id!!,
-                title = review.title,
-                author = review.author,
-                createAd = review.createdAt
+                review.id!!, review.title, review.author, review.rating, review.createdAt
             )
         }
     }
