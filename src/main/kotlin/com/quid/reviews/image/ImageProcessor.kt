@@ -1,4 +1,4 @@
-package com.quid.reviews.file
+package com.quid.reviews.image
 
 import org.springframework.util.ObjectUtils
 import org.springframework.web.multipart.MultipartFile

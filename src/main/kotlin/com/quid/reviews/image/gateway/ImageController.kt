@@ -1,4 +1,4 @@
-package com.quid.reviews.file.gateway
+package com.quid.reviews.image.gateway
 
 import org.springframework.core.io.FileSystemResource
 import org.springframework.core.io.Resource

@@ -1,6 +1,6 @@
 package com.quid.reviews.review.gateway.web
 
-import com.quid.reviews.file.ImageProcessor.Companion.saveImages
+import com.quid.reviews.image.ImageProcessor.Companion.saveImages
 import com.quid.reviews.review.domain.Review
 import com.quid.reviews.review.domain.createReview
 import org.springframework.web.multipart.MultipartFile

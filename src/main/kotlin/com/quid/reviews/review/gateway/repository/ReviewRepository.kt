@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository
 
 interface ReviewRepository {
     fun save(review: Review): Review
+    fun findAll() : List<Review>
 
     @Repository
     class ReviewRepositoryImpl(
@@ -13,5 +14,8 @@ interface ReviewRepository {
     ) : ReviewRepository {
 
         override fun save(review: Review) = mongoRepository.save(ofReview(review)).toReview()
+        override fun findAll(): List<Review> {
+            return mongoRepository.findAll().map { it.toReview() }
+        }
     }
 }

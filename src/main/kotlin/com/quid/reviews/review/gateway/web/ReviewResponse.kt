@@ -1,18 +1,21 @@
 package com.quid.reviews.review.gateway.web
 
 import com.quid.reviews.review.domain.Review
+import java.time.LocalDateTime
 
 data class ReviewResponse(
+    val id: String,
     val title: String,
-    val description: String,
-    val rating: Int,
+    val author: String,
+    val createAd: LocalDateTime
 ) {
     companion object {
-        fun of(create: Review): ReviewResponse {
+        fun of(review: Review): ReviewResponse {
             return ReviewResponse(
-                title = create.title,
-                description = create.description,
-                rating = create.rating,
+                id = review.id!!,
+                title = review.title,
+                author = review.author,
+                createAd = review.createdAt
             )
         }
     }
