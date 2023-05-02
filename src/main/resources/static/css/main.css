@@ -15,7 +15,10 @@
   margin-bottom: 20px;
 }
 
-tr:hover {
+.detail {
   cursor: pointer;
-  background-color: #cde4ff;
+}
+
+.detail:hover {
+  background: #00aeff;
 }

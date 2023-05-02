@@ -17,7 +17,8 @@ function renderList(list) {
     let td2 = document.createElement('td');
     let td3 = document.createElement('td');
     let td4 = document.createElement('td');
-    tr.setAttribute('onclick', 'location.href="/review?id=' + list[i].id + '"');
+    tr.setAttribute('onclick', 'location.href="/review/' + list[i].id + '"');
+    tr.setAttribute('class', "detail");
     td1.innerText = list[i].title;
     td2.innerText = list[i].author;
     td3.innerText = list[i].score;
