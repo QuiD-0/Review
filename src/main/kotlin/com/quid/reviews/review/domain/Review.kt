@@ -8,7 +8,7 @@ class Review(
     val description: String,
     val rating: Int,
     val productId: Long,
-    val userId: Long,
+    val userName: String,
     val createdAt: LocalDateTime = LocalDateTime.now(),
     val updatedAt: LocalDateTime = createdAt,
     val deleted: Boolean = false,
@@ -22,12 +22,12 @@ class Review(
     }
 }
 
-fun createReview(title: String, description: String, rating: Int, productId: Long, userId: Long): Review {
+fun createReview(title: String, description: String, rating: Int, productId: Long, userName: String): Review {
     return Review(
         title = title,
         description = description,
         rating = rating,
         productId = productId,
-        userId = userId,
+        userName = userName,
     )
 }
