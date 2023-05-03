@@ -25,6 +25,6 @@ class ReviewApiController(
         findReview.getReviewList().map { ReviewResponse.of(it) }
 
     @GetMapping("/{id}")
-    fun getReview(@PathVariable(name = "id") id: String): Review =
-        findReview.getReview(id)
+    fun getReview(@PathVariable(name = "id") id: String): ReviewDetailResponse =
+        ReviewDetailResponse.of(findReview.getReview(id))
 }

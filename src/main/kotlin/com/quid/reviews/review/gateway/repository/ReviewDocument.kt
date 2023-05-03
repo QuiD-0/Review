@@ -19,34 +19,36 @@ class ReviewDocument(
     private val updatedAt: LocalDateTime,
     private val deleted: Boolean,
     private val imgList: List<String>,
+    private val compressedImgList: List<String> = listOf()
 ) {
     fun toReview(): Review {
         return Review(
-            id = id.toHexString(),
-            title = title,
-            description = description,
-            rating = rating,
-            productId = productId,
-            author = author,
-            createdAt = createdAt,
-            updatedAt = updatedAt,
-            deleted = deleted,
-            imgList = imgList,
+            id.toHexString(),
+            title,
+            description,
+            rating,
+            productId,
+            author,
+            createdAt,
+            updatedAt,
+            deleted,
+            imgList,
+            compressedImgList
         )
     }
 }
 
 fun ofReview(review: Review): ReviewDocument {
     return ReviewDocument(
-        id = review.id?.let { ObjectId(it) } ?: ObjectId.get(),
-        title = review.title,
-        description = review.description,
-        rating = review.rating,
-        productId = review.productId,
-        author = review.author,
-        createdAt = review.createdAt,
-        updatedAt = review.updatedAt,
-        deleted = review.deleted,
-        imgList = review.imgList,
-    )
+        review.id?.let { ObjectId(it) } ?: ObjectId.get(),
+        review.title,
+        review.description,
+        review.rating,
+        review.productId,
+        review.author,
+        review.createdAt,
+        review.updatedAt,
+        review.deleted,
+        review.imgList,
+        review.compressedImgList)
 }

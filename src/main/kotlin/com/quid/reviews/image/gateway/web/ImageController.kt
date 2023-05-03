@@ -1,5 +1,6 @@
 package com.quid.reviews.image.gateway.web
 
+import com.quid.reviews.image.ImageProcessor
 import org.springframework.core.io.FileSystemResource
 import org.springframework.core.io.Resource
 import org.springframework.http.HttpHeaders
@@ -16,17 +17,16 @@ import java.nio.file.Paths
 @RestController
 @RequestMapping("/images")
 class ImageController {
-    @GetMapping(value = ["/{date}/{fileName}"])
-    fun getItemImageByName(@PathVariable("date") date: String, @PathVariable("fileName") fileName: String): ResponseEntity<Resource> {
-        val path = "images\\$date\\"
-        val resource = FileSystemResource(path + fileName)
-        if (!resource.exists()) {
-            throw IllegalAccessError()
-        }
-        val header = HttpHeaders()
-        val filePath = Paths.get(path + fileName)
-        header.add("Content-Type", Files.probeContentType(filePath))
-        return ResponseEntity<Resource>(resource, header, HttpStatus.OK)
-
+    @GetMapping(value = ["/compressed/{fileName}"])
+    fun getCompressedImageByName(@PathVariable("fileName") fileName: String): ResponseEntity<Resource> {
+        val path = "images\\compressed\\"
+        return ImageProcessor.viewImage(path + fileName)
     }
+
+    @GetMapping("/origin/{fileName}")
+    fun getOriginImageByName(@PathVariable("fileName") fileName: String): ResponseEntity<Resource> {
+        val path = "images\\origin\\"
+        return ImageProcessor.viewImage(path + fileName)
+    }
+
 }

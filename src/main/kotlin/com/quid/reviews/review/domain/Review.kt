@@ -21,6 +21,22 @@ class Review(
         if (description.length > 1000) throw IllegalArgumentException("Description must be less than 1000 characters")
         if (imgList.size > 5) throw IllegalArgumentException("Image list must be less than 5")
     }
+
+    fun copy(compressedImgList: List<String>) : Review {
+        return Review(
+            id,
+            title,
+            description,
+            rating,
+            productId,
+            author,
+            createdAt,
+            LocalDateTime.now(),
+            deleted,
+            imgList,
+            compressedImgList
+        )
+    }
 }
 
 fun createReview(

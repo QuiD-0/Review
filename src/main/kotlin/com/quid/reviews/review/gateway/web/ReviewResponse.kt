@@ -18,3 +18,27 @@ data class ReviewResponse(
         }
     }
 }
+
+data class ReviewDetailResponse(
+    val id: String,
+    val title: String,
+    val description: String,
+    val author: String,
+    val score: Int,
+    val createAt: LocalDateTime,
+    val imgList: List<String>
+) {
+    companion object {
+        fun of(review: Review): ReviewDetailResponse {
+            return ReviewDetailResponse(
+                review.id!!,
+                review.title,
+                review.description,
+                review.author,
+                review.rating,
+                review.createdAt,
+                review.compressedImgList
+            )
+        }
+    }
+}
