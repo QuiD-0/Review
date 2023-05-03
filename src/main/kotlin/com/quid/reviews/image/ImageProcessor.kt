@@ -5,12 +5,11 @@ import org.springframework.web.multipart.MultipartFile
 import java.io.File
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.util.UUID
-
+import java.util.*
 
 class ImageProcessor {
     companion object{
-        fun saveImages(imgList: List<MultipartFile>): List<String> {
+        fun save(imgList: List<MultipartFile>): List<String> {
             val date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
             val path = "images\\$date"
             val uploadDir = File(path)
@@ -19,17 +18,15 @@ class ImageProcessor {
             }
             val absolutePath = uploadDir.absolutePath
 
-           return imgList
-                .filterNot { ObjectUtils.isEmpty(it) }
-                .map {
-                    val fileName = it.originalFilename?: throw IllegalArgumentException("File name is empty")
-                    val uuidPath = "image_${UUID.randomUUID()}.${fileName.substringAfterLast('.')}"
-                    val filePath = "$absolutePath\\$uuidPath"
-                    val dest = File(filePath)
-                    it.transferTo(dest)
-                    "$uploadDir\\$uuidPath"
-                }
-                .toList()
+            return imgList.filterNot { ObjectUtils.isEmpty(it) }.map {
+                val fileName =
+                    it.originalFilename ?: throw IllegalArgumentException("File name is empty")
+                val uuidPath = "image_${UUID.randomUUID()}.${fileName.substringAfterLast('.')}"
+                val filePath = "$absolutePath\\$uuidPath"
+                val dest = File(filePath)
+                it.transferTo(dest)
+                "$uploadDir\\$uuidPath"
+            }.toList()
         }
     }
 
