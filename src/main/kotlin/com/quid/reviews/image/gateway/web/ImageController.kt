@@ -17,16 +17,10 @@ import java.nio.file.Paths
 @RestController
 @RequestMapping("/images")
 class ImageController {
-    @GetMapping(value = ["/compressed/{fileName}"])
-    fun getCompressedImageByName(@PathVariable("fileName") fileName: String): ResponseEntity<Resource> {
-        val path = "images\\compressed\\"
-        return ImageProcessor.viewImage(path + fileName)
-    }
 
-    @GetMapping("/origin/{fileName}")
-    fun getOriginImageByName(@PathVariable("fileName") fileName: String): ResponseEntity<Resource> {
-        val path = "images\\origin\\"
-        return ImageProcessor.viewImage(path + fileName)
+    @GetMapping(value = ["/{path}/{fileName}"])
+    fun getCompressedImageByName(@PathVariable("path") path: String, @PathVariable("fileName") fileName: String): ResponseEntity<Resource> {
+        return ImageProcessor.viewImage("images\\$path\\$fileName")
     }
 
 }
