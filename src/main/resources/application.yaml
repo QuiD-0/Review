@@ -5,3 +5,31 @@ spring:
     active: local
   config:
     import: optional:configserver:http://130.162.136.116:8888
+
+---
+spring:
+  profiles:
+    active: dev
+  data:
+    mongodb:
+      auto-index-creation: true
+      uri: mongodb://root:rootUser@130.162.136.116:27017/review?authSource=admin&authMechanism=SCRAM-SHA-1
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
+  kafka:
+    consumer:
+      properties:
+        spring.json.trusted.packages: "*"
+      bootstrap-servers: localhost:9092
+      group-id: review
+      auto-offset-reset: latest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+    producer:
+      bootstrap-servers: localhost:9092
+      key-serializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    listener:
+      ack-mode: Manual
