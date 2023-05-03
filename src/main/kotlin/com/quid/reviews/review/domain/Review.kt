@@ -13,6 +13,7 @@ class Review(
     val updatedAt: LocalDateTime = createdAt,
     val deleted: Boolean = false,
     val imgList: List<String> = listOf(),
+    val compressedImgList: List<String> = listOf()
 ) {
     init {
         if (rating < 0 || rating > 10) throw IllegalArgumentException("Rating must be between 0 and 5")
