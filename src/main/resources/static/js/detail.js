@@ -17,13 +17,17 @@ function renderDetail(data) {
     let author = document.createElement('h2');
     let rating = document.createElement('h3');
     let content = document.createElement('p');
-    let img = document.createElement('img');
-    img.setAttribute('src', data.imgList[0]);
+    data.imgList.forEach(function (imgSrc) {
+        let img = document.createElement('img');
+        img.src = imgSrc;
+        img.style.width = '500px';
+        img.style.height = 'auto';
+        container.appendChild(img);
+    });
     title.innerText = data.title;
     author.innerText = data.author;
     rating.innerText = data.rating;
     content.innerText = data.description;
-    container.appendChild(img);
     container.appendChild(title);
     container.appendChild(author);
     container.appendChild(rating);
