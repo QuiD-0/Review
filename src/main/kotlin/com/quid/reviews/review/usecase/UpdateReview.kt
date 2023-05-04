@@ -1,6 +1,7 @@
 package com.quid.reviews.review.usecase
 
 import com.quid.reviews.image.ImageProcessor
+import com.quid.reviews.image.usecase.CompressImage
 import com.quid.reviews.review.gateway.repository.ReviewRepository
 import org.springframework.stereotype.Service
 
@@ -9,12 +10,13 @@ interface UpdateReview {
 
     @Service
     class UpdateReviewUseCase(
+        private val compressImage: CompressImage,
         private val reviewRepository: ReviewRepository
     ) : UpdateReview{
         override fun compressImage(reviewId: String) {
             val review = reviewRepository.findById(reviewId)
-            review.imgList.map { ImageProcessor.compress(it) }
-                .let { reviewRepository.save(review) }
+            compressImage.list(review.imgList)
+                .let { reviewRepository.save(review.copy(it)) }
         }
     }
 }
