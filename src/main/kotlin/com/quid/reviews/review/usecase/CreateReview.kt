@@ -18,7 +18,7 @@ interface CreateReview {
     ) : CreateReview {
 
         override fun create(request: ReviewCreateRequest): Review =
-            ImageProcessor.run { save(request.imgList) }
+            request.imgList.map { ImageProcessor.save(it) }
                 .let { request.toReview(it) }
                 .let { reviewRepository.save(it) }
                 .also { imageProducer.compress(it.id!!) }

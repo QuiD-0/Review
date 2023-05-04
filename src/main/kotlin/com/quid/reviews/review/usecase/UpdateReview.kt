@@ -13,8 +13,8 @@ interface UpdateReview {
     ) : UpdateReview{
         override fun compressImage(reviewId: String) {
             val review = reviewRepository.findById(reviewId)
-            ImageProcessor.compress(review.imgList)
-                .let { reviewRepository.save(review.copy(it)) }
+            review.imgList.map { ImageProcessor.compress(it) }
+                .let { reviewRepository.save(review) }
         }
     }
 }
