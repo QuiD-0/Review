@@ -39,20 +39,9 @@ class ImageProcessor {
             return "$path\\$uuidPath"
         }
 
-        private fun getAbsolutePath(path: String): String {
-            val uploadDir = File(path)
-            if (!uploadDir.exists()) {
-                uploadDir.mkdir()
-            }
-            return uploadDir.absolutePath
-        }
-
         fun compress(imgPath: String): String {
             val path = COMPRESSED_PATH
-            val uploadDir = File(path)
-            if (!uploadDir.exists()) {
-                uploadDir.mkdir()
-            }
+            getAbsolutePath(path)
             val file = File(imgPath)
             val image = ImageIO.read(file)
             val compressedFile = File("$COMPRESSED_PATH\\${file.name}")
@@ -82,33 +71,43 @@ class ImageProcessor {
         }
 
         fun download(path: String, response: HttpServletResponse) {
-            val outputStream = response.outputStream
-            val image = File(path)
-            val imageBytes = image.readBytes()
-            response.contentType = MediaType.ALL_VALUE
-            response.setContentLength(imageBytes.size)
-            response.setHeader("Content-Disposition", "attachment; filename=" + image.name)
-            outputStream.write(imageBytes)
-            outputStream.flush()
-            outputStream.close()
+            response.outputStream.use {
+                val image = File(path)
+                val imageBytes = image.readBytes()
+                response.apply {
+                    contentType = MediaType.ALL_VALUE
+                    setContentLength(imageBytes.size)
+                    setHeader("Content-Disposition", "attachment; filename=" + image.name)
+                }
+                it.write(imageBytes)
+            }
         }
 
         fun download(paths: List<String>, response: HttpServletResponse) {
-            response.contentType = MediaType.APPLICATION_OCTET_STREAM_VALUE
-            response.setHeader("Content-Disposition", "attachment; filename=images.zip")
-            val outputStream = response.outputStream
-            ZipOutputStream(outputStream).use { zipOutputStream ->
+            response.apply {
+                contentType = MediaType.APPLICATION_OCTET_STREAM_VALUE
+                setHeader("Content-Disposition", "attachment; filename=images.zip")
+            }
+            ZipOutputStream(response.outputStream).use {
                 paths.forEach { imageName ->
                     val imageFile = File(imageName)
                     FileInputStream(imageFile).use { inputStream ->
                         val zipEntry = ZipEntry(imageFile.name)
                         zipEntry.time = imageFile.lastModified()
-                        zipOutputStream.putNextEntry(zipEntry)
-                        inputStream.copyTo(zipOutputStream)
-                        zipOutputStream.closeEntry()
+                        it.putNextEntry(zipEntry)
+                        inputStream.copyTo(it)
+                        it.closeEntry()
                     }
                 }
             }
+        }
+
+        private fun getAbsolutePath(path: String): String {
+            val uploadDir = File(path)
+            if (!uploadDir.exists()) {
+                uploadDir.mkdir()
+            }
+            return uploadDir.absolutePath
         }
     }
 
