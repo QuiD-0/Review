@@ -32,16 +32,29 @@ function renderDetailPage(data) {
   container.appendChild(author);
   container.appendChild(rating);
   container.appendChild(content);
+
+  if(data.imgList.length > 0) {
+    let downloadBtn = document.createElement('button');
+    downloadBtn.innerText = "원본 다운로드";
+    downloadBtn.onclick = downloadOriginalImages;
+    container.appendChild(downloadBtn);
+  }
 }
 
 const downloadOriginalImages = () => {
   const id = location.href.split('?')[1];
-  axios.get('/image/' + id,
+  axios.get('/images/' + id,
       headers = {
         responseType: 'blob'
       })
   .then(function (response) {
-    let data = response.data;
-    console.log(data);
+    var downloadUrl = window.URL.createObjectURL(response.data);
+    var link = document.createElement('a');
+    link.href = downloadUrl;
+    let title = response.headers['content-disposition'].split(';');
+    link.download = title[1].split('=')[1];
+    document.body.appendChild(link);
+    link.click();
+    link.parentNode.removeChild(link);
   })
 }
