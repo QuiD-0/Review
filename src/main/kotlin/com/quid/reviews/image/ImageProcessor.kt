@@ -42,7 +42,7 @@ class ImageProcessor {
         fun compress(imgPath: String): String {
             val path = COMPRESSED_PATH
             getAbsolutePath(path)
-            val file = File(imgPath)
+            val file = fileValidation(File(imgPath))
             val image = ImageIO.read(file)
             val compressedFile = File("$COMPRESSED_PATH\\${file.name}")
             val outputStream: OutputStream = FileOutputStream(compressedFile)
@@ -72,9 +72,9 @@ class ImageProcessor {
             return ResponseEntity<Resource>(resource, header, HttpStatus.OK)
         }
 
-        fun download(path: String, response: HttpServletResponse) {
+        fun download(path: String, response: HttpServletResponse) =
             response.outputStream.use {
-                val image = File(path)
+                val image = fileValidation(File(path))
                 val imageBytes = image.readBytes()
                 response.apply {
                     contentType = MediaType.ALL_VALUE
@@ -83,26 +83,25 @@ class ImageProcessor {
                 }
                 it.write(imageBytes)
             }
-        }
 
-        fun download(paths: List<String>, response: HttpServletResponse) {
+        fun download(paths: List<String>, response: HttpServletResponse) =
             response.apply {
                 contentType = MediaType.APPLICATION_OCTET_STREAM_VALUE
                 setHeader("Content-Disposition", "attachment; filename=images.zip")
-            }
-            ZipOutputStream(response.outputStream).use {
-                paths.forEach { imageName ->
-                    val imageFile = File(imageName)
-                    FileInputStream(imageFile).use { inputStream ->
-                        val zipEntry = ZipEntry(imageFile.name)
-                        zipEntry.time = imageFile.lastModified()
-                        it.putNextEntry(zipEntry)
-                        inputStream.copyTo(it)
-                        it.closeEntry()
+            }.let {
+                ZipOutputStream(it.outputStream).use {
+                    paths.forEach { imageName ->
+                        val imageFile = fileValidation(File(imageName))
+                        FileInputStream(imageFile).use { inputStream ->
+                            val zipEntry = ZipEntry(imageFile.name)
+                            zipEntry.time = imageFile.lastModified()
+                            it.putNextEntry(zipEntry)
+                            inputStream.copyTo(it)
+                            it.closeEntry()
+                        }
                     }
                 }
             }
-        }
 
         private fun getAbsolutePath(path: String): String {
             val uploadDir = File(path)
@@ -110,6 +109,13 @@ class ImageProcessor {
                 uploadDir.mkdir()
             }
             return uploadDir.absolutePath
+        }
+
+        private fun fileValidation(file: File) :File {
+            if(!file.exists()) {
+                throw IllegalArgumentException("File already exists")
+            }
+            return file
         }
     }
 
