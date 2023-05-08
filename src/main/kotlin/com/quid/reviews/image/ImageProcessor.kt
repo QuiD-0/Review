@@ -46,12 +46,13 @@ class ImageProcessor {
             val image = ImageIO.read(file)
             val compressedFile = File("$COMPRESSED_PATH\\${file.name}")
             val outputStream: OutputStream = FileOutputStream(compressedFile)
-            val imageWriter = ImageIO.getImageWritersByFormatName("jpg").next()
             val imageOutputStream = ImageIO.createImageOutputStream(outputStream)
-            imageWriter.output = imageOutputStream
-            val imageWriteParam: ImageWriteParam = imageWriter.defaultWriteParam
-            imageWriteParam.compressionMode = ImageWriteParam.MODE_EXPLICIT
-            imageWriteParam.compressionQuality = 0.5f
+            val imageWriter = ImageIO.getImageWritersByFormatName("jpg").next()
+                .apply { output = imageOutputStream }
+            val imageWriteParam: ImageWriteParam = imageWriter.defaultWriteParam.apply {
+                compressionMode = ImageWriteParam.MODE_EXPLICIT
+                compressionQuality = 0.5f
+            }
             imageWriter.write(null, IIOImage(image, null, null), imageWriteParam)
             outputStream.close()
             imageOutputStream.close()
@@ -60,13 +61,14 @@ class ImageProcessor {
         }
 
         fun viewImage(path: String): ResponseEntity<Resource> {
-            var resource = FileSystemResource(path)
-            if (!resource.exists()) {
-                resource = FileSystemResource("images\\default.jpg")
+            var file = File(path)
+            if (!file.exists()) {
+                file = File("images\\default.jpg")
             }
+            val resource = FileSystemResource(file)
             val header = HttpHeaders()
             val filePath = Paths.get(path)
-            header.add("Content-Type", Files.probeContentType(filePath))
+            HttpHeaders().add("Content-Type", Files.probeContentType(filePath))
             return ResponseEntity<Resource>(resource, header, HttpStatus.OK)
         }
 
