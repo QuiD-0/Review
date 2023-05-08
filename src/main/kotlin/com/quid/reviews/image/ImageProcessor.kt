@@ -4,17 +4,22 @@ import org.springframework.core.io.FileSystemResource
 import org.springframework.core.io.Resource
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.multipart.MultipartFile
 import java.io.File
+import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.OutputStream
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.util.*
+import java.util.zip.ZipEntry
+import java.util.zip.ZipOutputStream
 import javax.imageio.IIOImage
 import javax.imageio.ImageIO
 import javax.imageio.ImageWriteParam
+import javax.servlet.http.HttpServletResponse
 
 
 class ImageProcessor {
@@ -74,6 +79,36 @@ class ImageProcessor {
             val filePath = Paths.get(path)
             header.add("Content-Type", Files.probeContentType(filePath))
             return ResponseEntity<Resource>(resource, header, HttpStatus.OK)
+        }
+
+        fun download(path: String, response: HttpServletResponse) {
+            val outputStream = response.outputStream
+            val image = File(path)
+            val imageBytes = image.readBytes()
+            response.contentType = MediaType.ALL_VALUE
+            response.setContentLength(imageBytes.size)
+            response.setHeader("Content-Disposition", "attachment; filename=" + image.name)
+            outputStream.write(imageBytes)
+            outputStream.flush()
+            outputStream.close()
+        }
+
+        fun download(paths: List<String>, response: HttpServletResponse) {
+            response.contentType = MediaType.APPLICATION_OCTET_STREAM_VALUE
+            response.setHeader("Content-Disposition", "attachment; filename=images.zip")
+            val outputStream = response.outputStream
+            ZipOutputStream(outputStream).use { zipOutputStream ->
+                paths.forEach { imageName ->
+                    val imageFile = File(imageName)
+                    FileInputStream(imageFile).use { inputStream ->
+                        val zipEntry = ZipEntry(imageFile.name)
+                        zipEntry.time = imageFile.lastModified()
+                        zipOutputStream.putNextEntry(zipEntry)
+                        inputStream.copyTo(zipOutputStream)
+                        zipOutputStream.closeEntry()
+                    }
+                }
+            }
         }
     }
 

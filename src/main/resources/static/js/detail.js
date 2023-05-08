@@ -37,6 +37,7 @@ function renderDetailPage(data) {
     let downloadBtn = document.createElement('button');
     downloadBtn.innerText = "원본 다운로드";
     downloadBtn.onclick = downloadOriginalImages;
+    downloadBtn.setAttribute('class', 'btn btn-primary')
     container.appendChild(downloadBtn);
   }
 }
