@@ -19,7 +19,6 @@ class ReviewDocument(
     private val updatedAt: LocalDateTime,
     private val deleted: Boolean,
     private val imgList: List<String>,
-    private val compressedImgList: List<String> = listOf()
 ) {
     fun toReview(): Review {
         return Review(
@@ -33,7 +32,6 @@ class ReviewDocument(
             updatedAt,
             deleted,
             imgList,
-            compressedImgList
         )
     }
 }
@@ -50,5 +48,5 @@ fun ofReview(review: Review): ReviewDocument {
         review.updatedAt,
         review.deleted,
         review.imgList,
-        review.compressedImgList)
+        )
 }
