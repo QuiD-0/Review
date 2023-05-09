@@ -37,7 +37,7 @@ data class ReviewDetailResponse(
                 review.author,
                 review.rating,
                 review.createdAt,
-                review.compressedImgList
+                review.imgList
             )
         }
     }
