@@ -44,7 +44,7 @@ function renderDetailPage(data) {
 
 const downloadOriginalImages = () => {
   const id = location.href.split('?')[1];
-  axios.get('/images/' + id,
+  axios.get('/images/origin/' + id,
       headers = {
         responseType: 'blob'
       })

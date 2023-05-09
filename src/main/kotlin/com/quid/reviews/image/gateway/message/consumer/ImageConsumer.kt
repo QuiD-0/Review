@@ -1,6 +1,6 @@
 package com.quid.reviews.image.gateway.message.consumer
 
-import com.quid.reviews.review.usecase.UpdateReview
+import com.quid.reviews.image.usecase.CompressImage
 import org.springframework.kafka.annotation.KafkaListener
 import org.springframework.kafka.support.Acknowledgment
 import org.springframework.stereotype.Component
@@ -10,12 +10,12 @@ interface ImageConsumer {
 
     @Component
     class KafkaImageConsumer(
-        private val updateReview : UpdateReview
+        private val compressImage: CompressImage
     ) : ImageConsumer {
 
         @KafkaListener(topics = ["compressImage"], groupId = "image")
         override fun consume(message: String, ack : Acknowledgment) {
-            updateReview.compressImage(message)
+            compressImage.execute(message)
             ack.acknowledge()
         }
     }

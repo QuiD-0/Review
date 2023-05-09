@@ -1,17 +1,22 @@
 package com.quid.reviews.image.usecase
 
 import com.quid.reviews.image.ImageProcessor
+import com.quid.reviews.review.gateway.repository.ReviewRepository
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
+@FunctionalInterface
 interface CompressImage {
 
-    fun list(imgList: List<String>): List<String>
+    fun execute(id: String)
 
     @Service
-    class CompressImageUseCase: CompressImage {
+    @Transactional(readOnly = true)
+    class CompressImageUseCase(
+        private val reviewRepository: ReviewRepository,
+    ) : CompressImage {
 
-        override fun list(imgList: List<String>): List<String> = imgList.map {
-                ImageProcessor.compress(it)
-            }.toList()
+        override fun execute(id: String) =
+            reviewRepository.findById(id).imgList.forEach { ImageProcessor.compress(it) }
     }
 }

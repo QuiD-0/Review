@@ -5,12 +5,13 @@ import org.springframework.core.io.Resource
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 
+@FunctionalInterface
 interface ViewImage {
-    fun find(path: String, fileName: String): ResponseEntity<Resource>
+    fun find(fileName: String): ResponseEntity<Resource>
 
     @Service
     class ViewImageUseCase : ViewImage {
-        override fun find(path: String, fileName: String): ResponseEntity<Resource> =
-            ImageProcessor.viewImage("images\\$path\\$fileName")
+        override fun find(fileName: String): ResponseEntity<Resource> =
+            ImageProcessor.viewImage("images\\compressed\\$fileName")
     }
 }

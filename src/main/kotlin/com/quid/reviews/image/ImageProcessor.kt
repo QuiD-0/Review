@@ -29,19 +29,20 @@ class ImageProcessor {
 
         fun save(image: MultipartFile): String {
             val path = ORIGIN_PATH
-            val absolutePath = getAbsolutePath(path)
+            makeDir(path)
+            val absolutePath = File(path).absolutePath
             val fileName =
                 image.originalFilename ?: throw IllegalArgumentException("File name is empty")
-            val uuidPath = "image_${UUID.randomUUID()}.${fileName.substringAfterLast('.')}"
+            val uuidPath = "image-${UUID.randomUUID()}.${fileName.substringAfterLast('.')}"
             val filePath = "$absolutePath\\$uuidPath"
             val dest = File(filePath)
             image.transferTo(dest)
-            return "$path\\$uuidPath"
+            return "images\\$uuidPath"
         }
 
         fun compress(imgPath: String): String {
             val path = COMPRESSED_PATH
-            getAbsolutePath(path)
+            makeDir(path)
             val file = fileValidation(File(imgPath))
             val image = ImageIO.read(file)
             val compressedFile = File("$COMPRESSED_PATH\\${file.name}")
@@ -72,48 +73,47 @@ class ImageProcessor {
             return ResponseEntity<Resource>(resource, header, HttpStatus.OK)
         }
 
-        fun download(path: String, response: HttpServletResponse) =
-            response.outputStream.use {
-                val image = fileValidation(File(path))
-                val imageBytes = image.readBytes()
-                response.apply {
-                    contentType = MediaType.ALL_VALUE
-                    setContentLength(imageBytes.size)
-                    setHeader("Content-Disposition", "attachment; filename=" + image.name)
-                }
-                it.write(imageBytes)
-            }
-
-        fun download(paths: List<String>, response: HttpServletResponse) =
+        fun download(path: String, response: HttpServletResponse) = response.outputStream.use {
+            val imagePath = path.substringAfterLast('\\')
+            val image = fileValidation(File("$ORIGIN_PATH\\$imagePath"))
+            val imageBytes = image.readBytes()
             response.apply {
-                contentType = MediaType.APPLICATION_OCTET_STREAM_VALUE
-                setHeader("Content-Disposition", "attachment; filename=images.zip")
-            }.let {
-                ZipOutputStream(it.outputStream).use {
-                    paths.forEach { imageName ->
-                        val imageFile = fileValidation(File(imageName))
-                        FileInputStream(imageFile).use { inputStream ->
-                            val zipEntry = ZipEntry(imageFile.name)
-                            zipEntry.time = imageFile.lastModified()
-                            it.putNextEntry(zipEntry)
-                            inputStream.copyTo(it)
-                            it.closeEntry()
-                        }
+                contentType = MediaType.ALL_VALUE
+                setContentLength(imageBytes.size)
+                setHeader("Content-Disposition", "attachment; filename=${image.name}")
+            }
+            it.write(imageBytes)
+        }
+
+        fun download(paths: List<String>, response: HttpServletResponse) = response.apply {
+            contentType = MediaType.APPLICATION_OCTET_STREAM_VALUE
+            setHeader("Content-Disposition", "attachment; filename=images.zip")
+        }.let {
+            ZipOutputStream(it.outputStream).use {
+                paths.forEach { imageName ->
+                    val imagePath = imageName.substringAfterLast('\\')
+                    val imageFile = fileValidation(File("$ORIGIN_PATH\\$imagePath"))
+                    FileInputStream(imageFile).use { inputStream ->
+                        val zipEntry = ZipEntry(imageFile.name)
+                        zipEntry.time = imageFile.lastModified()
+                        it.putNextEntry(zipEntry)
+                        inputStream.copyTo(it)
+                        it.closeEntry()
                     }
                 }
             }
+        }
 
-        private fun getAbsolutePath(path: String): String {
+        private fun makeDir(path: String) {
             val uploadDir = File(path)
             if (!uploadDir.exists()) {
                 uploadDir.mkdir()
             }
-            return uploadDir.absolutePath
         }
 
-        private fun fileValidation(file: File) :File {
-            if(!file.exists()) {
-                throw IllegalArgumentException("File already exists")
+        private fun fileValidation(file: File): File {
+            if (!file.exists()) {
+                throw IllegalArgumentException("File not exists")
             }
             return file
         }
