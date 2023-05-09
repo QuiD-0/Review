@@ -8,6 +8,7 @@ import com.quid.reviews.review.gateway.web.ReviewCreateRequest
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
+@FunctionalInterface
 interface CreateReview {
     fun create(request: ReviewCreateRequest): Review
 

@@ -5,4 +5,5 @@ import org.springframework.data.repository.CrudRepository
 
 interface MongoReviewRepository : CrudRepository<ReviewDocument, String> {
     fun findByDeletedFalse(): List<ReviewDocument>
+    fun findByIdAndDeletedFalse(id: String): ReviewDocument?
 }

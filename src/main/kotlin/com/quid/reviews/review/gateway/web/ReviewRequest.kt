@@ -1,7 +1,7 @@
 package com.quid.reviews.review.gateway.web
 
 import com.quid.reviews.review.domain.Review
-import com.quid.reviews.review.domain.createReview
+import com.quid.reviews.review.domain.Review.Companion.createReview
 import org.springframework.web.multipart.MultipartFile
 
 data class ReviewCreateRequest(
@@ -21,3 +21,9 @@ data class ReviewCreateRequest(
         saveImages
     )
 }
+
+data class ReviewUpdateRequest(
+    val title: String,
+    val description: String,
+    val score: Int,
+)

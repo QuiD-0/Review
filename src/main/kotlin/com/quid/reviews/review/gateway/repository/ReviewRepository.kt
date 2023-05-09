@@ -2,7 +2,6 @@ package com.quid.reviews.review.gateway.repository
 
 import com.quid.reviews.review.domain.Review
 import com.quid.reviews.review.gateway.repository.mongoDB.MongoReviewRepository
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Repository
 
 interface ReviewRepository {
@@ -20,6 +19,6 @@ interface ReviewRepository {
         override fun findAll(): List<Review> = mongoRepository.findByDeletedFalse().map { it.toReview() }
 
         override fun findById(id: String): Review =
-            mongoRepository.findByIdOrNull(id)?.toReview() ?: throw Exception("Review not found")
+            mongoRepository.findByIdAndDeletedFalse(id)?.toReview() ?: throw Exception("Review not found")
     }
 }
