@@ -8,7 +8,7 @@ class ImageProcessorTest{
 
     @Test
     fun compressImage() {
-        val image = compress(listOf("images\\2023-05-02\\image_3509b468-8dfb-410d-9591-b67b95f939ea.jpg"))
+        val image = compress("images\\origin\\image_3509b468-8dfb-410d-9591-b67b95f939ea.jpg")
         assertNotNull(image)
     }
 }

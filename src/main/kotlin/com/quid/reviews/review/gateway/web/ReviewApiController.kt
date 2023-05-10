@@ -1,6 +1,5 @@
 package com.quid.reviews.review.gateway.web
 
-import com.quid.reviews.review.domain.Review
 import com.quid.reviews.review.usecase.CreateReview
 import com.quid.reviews.review.usecase.DeleteReview
 import com.quid.reviews.review.usecase.FindReview

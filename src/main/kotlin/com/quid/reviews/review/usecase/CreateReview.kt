@@ -24,6 +24,6 @@ interface CreateReview {
             saveImage.list(request.imgList)
                 .let { request.toReview(it) }
                 .let { reviewRepository.save(it) }
-                .also { imageProducer.compress(it.id!!) }
+                .also { if(it.imgList.isNotEmpty()) imageProducer.compress(it.id!!) }
     }
 }
