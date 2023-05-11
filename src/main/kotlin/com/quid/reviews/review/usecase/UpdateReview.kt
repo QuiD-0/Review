@@ -14,7 +14,7 @@ interface UpdateReview {
         private val reviewRepository: ReviewRepository,
     ) : UpdateReview {
         override fun update(id: String, title: String, description: String, score: Int): Review =
-            reviewRepository.findById(id).update(title, description, score)
-                .also { reviewRepository.save(it) }
+            reviewRepository.findById(id)
+                .let { reviewRepository.update(it, title, description, score) }
     }
 }

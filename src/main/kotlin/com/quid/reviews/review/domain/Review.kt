@@ -21,36 +21,6 @@ class Review(
         if (imgList.size > 5) throw IllegalArgumentException("Image list must be less than 5")
     }
 
-    fun update(title: String, description: String, rating: Int): Review {
-        return Review(
-            id = id,
-            title = title,
-            description = description,
-            rating = rating,
-            productId = productId,
-            author = author,
-            createdAt = createdAt,
-            updatedAt = LocalDateTime.now(),
-            deleted = deleted,
-            imgList = imgList
-        )
-    }
-
-    fun delete(): Review {
-        return Review(
-            id = id,
-            title = title,
-            description = description,
-            rating = rating,
-            productId = productId,
-            author = author,
-            createdAt = createdAt,
-            updatedAt = LocalDateTime.now(),
-            deleted = true,
-            imgList = imgList
-        )
-    }
-
     companion object{
         fun createReview(
             title: String,

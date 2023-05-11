@@ -34,6 +34,37 @@ class ReviewDocument(
             imgList,
         )
     }
+
+    fun delete(): ReviewDocument {
+        return ReviewDocument(
+            id,
+            title,
+            description,
+            rating,
+            productId,
+            author,
+            createdAt,
+            LocalDateTime.now(),
+            true,
+            imgList,
+        )
+
+    }
+
+    fun update(updatedTitle: String, updatedDescription: String, updatedScore: Int): ReviewDocument {
+        return ReviewDocument(
+            id,
+            updatedTitle,
+            updatedDescription,
+            updatedScore,
+            productId,
+            author,
+            createdAt,
+            LocalDateTime.now(),
+            deleted,
+            imgList,
+        )
+    }
 }
 
 fun ofReview(review: Review): ReviewDocument {
