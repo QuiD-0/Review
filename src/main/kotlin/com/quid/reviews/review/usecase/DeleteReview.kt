@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 interface DeleteReview {
-    fun delete(id: String): Unit
+    fun delete(id: String)
 
     @Service
     @Transactional
