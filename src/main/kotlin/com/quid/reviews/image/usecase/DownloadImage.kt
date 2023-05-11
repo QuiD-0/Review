@@ -18,9 +18,9 @@ interface DownloadImage {
         override fun byReviewId(id: String, response: HttpServletResponse) =
             reviewRepository.findById(id).let {
                     when (it.imgList.size) {
-                        0 -> throw IllegalStateException("No image found for review with id $id")
                         1 -> ImageProcessor.download(it.imgList[0], response)
-                        else -> ImageProcessor.download(it.imgList, response)
+                        in 2..5 -> ImageProcessor.download(it.imgList, response)
+                        else -> throw Exception("Image size is not valid")
                     }
                 }
     }
