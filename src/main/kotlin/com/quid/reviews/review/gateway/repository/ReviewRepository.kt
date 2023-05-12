@@ -9,7 +9,7 @@ interface ReviewRepository {
     fun findAll(): List<Review>
     fun findById(id: String): Review
     fun delete(review: Review)
-    fun update(review: Review, title: String, description: String, score: Int): Review
+    fun update(id: String, title: String, description: String, score: Int): Review
 
     @Repository
     class ReviewRepositoryImpl(
@@ -28,9 +28,10 @@ interface ReviewRepository {
         override fun delete(review: Review): Unit =
             mongoRepository.save(document(review).delete()).let { }
 
-        override fun update(review: Review, title: String, description: String, score: Int, ): Review =
-            document(review).update(title, description, score)
-                .let { mongoRepository.save(it).toReview() }
+        override fun update(id: String, title: String, description: String, score: Int): Review =
+            mongoRepository.findByIdAndDeletedFalse(id)?.let {
+                mongoRepository.save(it.update(title, description, score)).toReview()
+            } ?: throw Exception("Review not found")
 
     }
 }
