@@ -8,7 +8,7 @@ interface ReviewRepository {
     fun save(review: Review): Review
     fun findAll(): List<Review>
     fun findById(id: String): Review
-    fun delete(review: Review)
+    fun delete(id: String)
     fun update(id: String, title: String, description: String, score: Int): Review
 
     @Repository
@@ -25,8 +25,9 @@ interface ReviewRepository {
             mongoRepository.findByIdAndDeletedFalse(id)?.toReview()
                 ?: throw Exception("Review not found")
 
-        override fun delete(review: Review): Unit =
-            mongoRepository.save(document(review).delete()).let { }
+        override fun delete(id: String): Unit =
+            Unit.run {mongoRepository.findByIdAndDeletedFalse(id)
+                    ?.let { mongoRepository.save(it.delete()) } }
 
         override fun update(id: String, title: String, description: String, score: Int): Review =
             mongoRepository.findByIdAndDeletedFalse(id)?.let {

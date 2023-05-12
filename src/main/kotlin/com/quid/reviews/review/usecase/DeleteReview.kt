@@ -12,6 +12,6 @@ interface DeleteReview {
     class DeleteReviewUseCase(
         private val reviewRepository: ReviewRepository,
     ) : DeleteReview {
-        override fun delete(id: String): Unit = reviewRepository.findById(id).let { reviewRepository.delete(it) }
+        override fun delete(id: String): Unit = reviewRepository.delete(id)
     }
 }

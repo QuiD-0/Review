@@ -1,7 +1,7 @@
 package com.quid.reviews.review.usecase
 
 import com.quid.reviews.review.gateway.web.ReviewCreateRequest
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertDoesNotThrow
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Profile
 
 @Profile
 @SpringBootTest
-class DeleteReviewTest{
+class DeleteReviewTest {
 
     @Autowired
     lateinit var deleteReview: DeleteReview
@@ -21,7 +21,7 @@ class DeleteReviewTest{
     lateinit var id: String
 
     @BeforeEach
-    fun setup(){
+    fun setup() {
         val request = ReviewCreateRequest(
             title = "title",
             description = "description",
@@ -33,7 +33,12 @@ class DeleteReviewTest{
     }
 
     @Test
-    fun `리뷰 삭제`(){
+    fun `리뷰 삭제`() {
         assertDoesNotThrow { deleteReview.delete(id) }
+    }
+
+    @Test
+    fun `리뷰 삭제 실패`() {
+        assertDoesNotThrow { deleteReview.delete("testId") }
     }
 }
