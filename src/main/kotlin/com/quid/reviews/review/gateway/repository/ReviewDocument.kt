@@ -67,7 +67,7 @@ class ReviewDocument(
     }
 }
 
-fun ofReview(review: Review): ReviewDocument {
+fun document(review: Review): ReviewDocument {
     return ReviewDocument(
         review.id?.let { ObjectId(it) } ?: ObjectId.get(),
         review.title,

@@ -16,7 +16,7 @@ interface ReviewRepository {
         private val mongoRepository: MongoReviewRepository,
     ) : ReviewRepository {
 
-        override fun save(review: Review) = mongoRepository.save(ofReview(review)).toReview()
+        override fun save(review: Review) = mongoRepository.save(document(review)).toReview()
 
         override fun findAll(): List<Review> =
             mongoRepository.findByDeletedFalse().map { it.toReview() }
@@ -26,10 +26,10 @@ interface ReviewRepository {
                 ?: throw Exception("Review not found")
 
         override fun delete(review: Review): Unit =
-            mongoRepository.save(ofReview(review).delete()).let { }
+            mongoRepository.save(document(review).delete()).let { }
 
         override fun update(review: Review, title: String, description: String, score: Int, ): Review =
-            ofReview(review).update(title, description, score)
+            document(review).update(title, description, score)
                 .let { mongoRepository.save(it).toReview() }
 
     }
