@@ -10,14 +10,14 @@ import java.time.LocalDateTime
 @Document("reviews")
 class ReviewDocument(
     @Id private val id: ObjectId,
-    private val title: String,
-    private val description: String,
-    private val rating: Int,
+    private var title: String,
+    private var description: String,
+    private var rating: Int,
     @Indexed private val productId: Long,
     @Indexed private val author: String,
     private val createdAt: LocalDateTime,
-    private val updatedAt: LocalDateTime,
-    private val deleted: Boolean,
+    private var updatedAt: LocalDateTime,
+    private var deleted: Boolean,
     private val imgList: List<String>,
 ) {
     fun toReview(): Review {
@@ -36,33 +36,21 @@ class ReviewDocument(
     }
 
     fun delete(): ReviewDocument {
-        return ReviewDocument(
-            id,
-            title,
-            description,
-            rating,
-            productId,
-            author,
-            createdAt,
-            LocalDateTime.now(),
-            true,
-            imgList,
-        )
+        this.deleted = true
+        this.updatedAt = LocalDateTime.now()
+        return this
     }
 
-    fun update(updatedTitle: String, updatedDescription: String, updatedScore: Int): ReviewDocument {
-        return ReviewDocument(
-            id,
-            updatedTitle,
-            updatedDescription,
-            updatedScore,
-            productId,
-            author,
-            createdAt,
-            LocalDateTime.now(),
-            deleted,
-            imgList,
-        )
+    fun update(
+        updatedTitle: String,
+        updatedDescription: String,
+        updatedScore: Int,
+    ): ReviewDocument {
+        this.title = updatedTitle
+        this.description = updatedDescription
+        this.rating = updatedScore
+        this.updatedAt = LocalDateTime.now()
+        return this
     }
 }
 
@@ -78,5 +66,5 @@ fun document(review: Review): ReviewDocument {
         review.updatedAt,
         review.deleted,
         review.imgList,
-        )
+    )
 }
