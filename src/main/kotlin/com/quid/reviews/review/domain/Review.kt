@@ -1,6 +1,5 @@
 package com.quid.reviews.review.domain
 
-import com.quid.reviews.review.gateway.repository.ReviewDocument
 import java.time.LocalDateTime
 
 class Review(
