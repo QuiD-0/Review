@@ -1,7 +1,7 @@
 package com.quid.reviews.review.gateway.web
 
 import com.quid.reviews.review.domain.Review
-import com.quid.reviews.review.domain.Review.Companion.createReview
+import com.quid.reviews.review.domain.createReview
 import org.springframework.web.multipart.MultipartFile
 
 data class ReviewCreateRequest(

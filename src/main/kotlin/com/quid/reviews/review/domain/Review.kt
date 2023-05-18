@@ -25,23 +25,22 @@ class Review(
 
     fun getImgSize(): Int = imgList.size
 
-    companion object{
-        fun createReview(
-            title: String,
-            description: String,
-            rating: Int,
-            productId: Long,
-            author: String,
-            imgList: List<String> = listOf()
-        ): Review {
-            return Review(
-                title = title,
-                description = description,
-                rating = rating,
-                productId = productId,
-                author = author,
-                imgList = imgList
-            )
-        }
-    }
+}
+
+fun createReview(
+    title: String,
+    description: String,
+    rating: Int,
+    productId: Long,
+    author: String,
+    imgList: List<String> = listOf()
+): Review {
+    return Review(
+        title = title,
+        description = description,
+        rating = rating,
+        productId = productId,
+        author = author,
+        imgList = imgList
+    )
 }
