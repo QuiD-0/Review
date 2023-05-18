@@ -21,9 +21,9 @@ class Review(
         if (imgList.size > 5) throw IllegalArgumentException("Image list must be less than 5")
     }
 
-    fun imageListIsNotEmpty(): Boolean {
-        return imgList.isNotEmpty()
-    }
+    fun imageListIsNotEmpty(): Boolean = imgList.isNotEmpty()
+
+    fun getImgSize(): Int = imgList.size
 
     companion object{
         fun createReview(

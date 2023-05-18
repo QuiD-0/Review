@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse
 @RequestMapping("/images")
 class ImageController(
     private val viewImage: ViewImage,
-    private val downloadImage: DownloadImage
+    private val image: DownloadImage
 ) {
 
     @GetMapping("/{fileName}")
@@ -21,6 +21,6 @@ class ImageController(
 
     @GetMapping("/origin/{id}")
     fun downloadOriginalImage(@PathVariable("id") id: String, response: HttpServletResponse): Unit =
-        downloadImage.byReviewId(id, response)
+        image.download(id, response)
 
 }

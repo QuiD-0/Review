@@ -12,6 +12,6 @@ interface ViewImage {
     @Service
     class ViewImageUseCase : ViewImage {
         override fun find(fileName: String): ResponseEntity<Resource> =
-            ImageProcessor.viewImage("images\\compressed\\$fileName")
+            ImageProcessor.viewImage(fileName)
     }
 }

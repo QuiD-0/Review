@@ -8,16 +8,16 @@ import javax.servlet.http.HttpServletResponse
 
 @FunctionalInterface
 interface DownloadImage {
-    fun byReviewId(id: String, response: HttpServletResponse)
+    fun download(id: String, response: HttpServletResponse)
 
     @Service
     @Transactional(readOnly = true)
     class DownloadImageUseCase(
         private val reviewRepository: ReviewRepository,
     ) : DownloadImage {
-        override fun byReviewId(id: String, response: HttpServletResponse) =
+        override fun download(id: String, response: HttpServletResponse) =
             reviewRepository.findById(id).let {
-                    when (it.imgList.size) {
+                    when (it.getImgSize()) {
                         1 -> ImageProcessor.download(it.imgList[0], response)
                         in 2..5 -> ImageProcessor.download(it.imgList, response)
                         else -> throw Exception("Image size is not valid")

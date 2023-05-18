@@ -62,7 +62,7 @@ class ImageProcessor {
         }
 
         fun viewImage(path: String): ResponseEntity<Resource> {
-            var file = File(path)
+            var file = File("$COMPRESSED_PATH\\$path")
             if (!file.exists()) {
                 file = File("images\\default.jpg")
             }
