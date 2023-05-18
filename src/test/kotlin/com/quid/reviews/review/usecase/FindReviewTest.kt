@@ -27,6 +27,8 @@ class FindReviewTest {
             productId = 1
         )
         createReview.create(request)
+        createReview.create(request)
+        createReview.create(request)
     }
 
     @Test

@@ -2,6 +2,7 @@ package com.quid.reviews.review.usecase
 
 import com.quid.reviews.review.gateway.web.ReviewCreateRequest
 import org.junit.jupiter.api.Assertions.assertDoesNotThrow
+import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -39,6 +40,6 @@ class DeleteReviewTest {
 
     @Test
     fun `리뷰 삭제 실패`() {
-        assertDoesNotThrow { deleteReview.delete("testId") }
+        assertThrows(Exception::class.java) { deleteReview.delete("1") }
     }
 }

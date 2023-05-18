@@ -34,24 +34,6 @@ class ReviewDocument(
             imgList,
         )
     }
-
-    fun delete(): ReviewDocument {
-        this.deleted = true
-        this.updatedAt = LocalDateTime.now()
-        return this
-    }
-
-    fun update(
-        updatedTitle: String,
-        updatedDescription: String,
-        updatedScore: Int,
-    ): ReviewDocument {
-        this.title = updatedTitle
-        this.description = updatedDescription
-        this.rating = updatedScore
-        this.updatedAt = LocalDateTime.now()
-        return this
-    }
 }
 
 fun document(review: Review): ReviewDocument {

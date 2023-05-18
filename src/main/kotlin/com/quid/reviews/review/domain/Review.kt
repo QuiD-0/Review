@@ -1,5 +1,6 @@
 package com.quid.reviews.review.domain
 
+import com.quid.reviews.review.gateway.repository.ReviewDocument
 import java.time.LocalDateTime
 
 class Review(
@@ -15,16 +16,46 @@ class Review(
     val imgList: List<String> = listOf(),
 ) {
     init {
-        if (rating < 0 || rating > 10) throw IllegalArgumentException("Rating must be between 0 and 5")
-        if (title.length > 100) throw IllegalArgumentException("Title must be less than 100 characters")
-        if (description.length > 1000) throw IllegalArgumentException("Description must be less than 1000 characters")
-        if (imgList.size > 5) throw IllegalArgumentException("Image list must be less than 5")
+        ReviewValidator(title, description, rating, imgList).validate()
     }
 
     fun imageListIsNotEmpty(): Boolean = imgList.isNotEmpty()
 
     fun getImgSize(): Int = imgList.size
 
+    fun update(
+        updatedTitle: String,
+        updatedDescription: String,
+        updatedScore: Int,
+    ): Review {
+        return Review(
+            id = this.id,
+            title = updatedTitle,
+            description = updatedDescription,
+            rating = updatedScore,
+            productId = this.productId,
+            author = this.author,
+            createdAt = this.createdAt,
+            updatedAt = LocalDateTime.now(),
+            deleted = this.deleted,
+            imgList = this.imgList
+        )
+    }
+
+    fun delete(): Review {
+        return Review(
+            id = this.id,
+            title = this.title,
+            description = this.description,
+            rating = this.rating,
+            productId = this.productId,
+            author = this.author,
+            createdAt = this.createdAt,
+            updatedAt = LocalDateTime.now(),
+            deleted = true,
+            imgList = this.imgList
+        )
+    }
 }
 
 fun createReview(
